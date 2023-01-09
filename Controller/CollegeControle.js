@@ -2,7 +2,6 @@ const CollegeModel=require("../models/collegemodel")
 const mongoose=require("mongoose")
 const InternModel=require("../models/InternModel")
 const collegemodel = require("../models/collegemodel")
-// const validName = (name) => /^[a-zA-Z_]{3,100}$/.test(name);
 const {validName}= require("../validator/validation")
 
 
@@ -35,7 +34,7 @@ const getCollege = async function (req, res) {
         if (!data.collegeName) return res.status(400).send({msg: 'please enter college name'});
         if (!validName(data.collegeName)) return res.status(400).send({status: false, msg: 'please enter a valid college name'});
         const college = await CollegeModel.findOne({name: data.collegeName});
-        if (!college) return res.status(400).send({status: false, msg: 'college with this name does not exits'});
+        if (!college) return res.status(404).send({status: false, msg: 'college with this name does not exits'});
 
         const interns = await InternModel.find({collegeId: college._id}).select({name: 1, email: 1, mobile: 1});
         

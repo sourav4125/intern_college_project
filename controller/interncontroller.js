@@ -1,10 +1,8 @@
 const InternModel = require("../models/InternModel");
 const mongoose = require("mongoose");
-// const validMail = (mail) =>
-//     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail); 
-// const validName = (name) => /^[a-zA-Z_]{3,20}$/.test(name);
-// const validNumber = (number) => /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/ .test(number);
-const { isValidObjectId } = require('mongoose')
+const { isValidObjectId } = require('mongoose');
+const collegemodel = require("../models/collegemodel");
+const {validName,validMail,validNumber}=require("../validator/validation")
 
 
 const new_intern = async function (req, res) {
@@ -30,14 +28,17 @@ const new_intern = async function (req, res) {
     
     if(!isValidObjectId(data.collegeId)) return res.status(400).send({status:false,msg:"Enter valid college id"})
 
+    let id=await collegemodel.findById(data.collegeId)
+    if(!id) return res.status(400).send({status: false,msg:"CollegeId doesn't exits"})
+
     let CreateIntern = await InternModel.create(data);
     res
       .status(201)
-      .send({ status: true, msg: "Intern Created", data: CreateIntern });
+      .send({ status: true, data: CreateIntern });
   } catch (error) {
     res
       .status(500)
-      .send({ status: false, msg: "Error Creating", data: error.message });
+      .send({ status: false, msg: error.message });
   }
 };
 module.exports.new_intern = new_intern;
