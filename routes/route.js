@@ -7,6 +7,6 @@ router.post("/functionup/interns", interController.new_intern);
 
 router.post("/functionup/colleges",collegecontrollr.createcollege)
 
-router.get("/functionup/collegeDetails")
+router.get("/functionup/collegeDetails",collegecontrollr.getCollege)
 
 module.exports = router;
