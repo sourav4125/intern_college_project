@@ -12,6 +12,6 @@ mongoose.connect("mongodb+srv://Soumyaranjan:utnipsom@soumya-db.3rzvirb.mongodb.
 const route = require('./routes/route');
 app.use('/',route);
 
-app.listen(process.env.PORT||3000, function(){
-    console.log("app is running on" + (process.env.PORT || 3000))
+app.listen(3000, function(){
+    console.log("app is running on" + 3000)
 });
