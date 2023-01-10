@@ -1,21 +1,21 @@
 const CollegeModel=require("../models/collegemodel")
 const mongoose=require("mongoose")
 const InternModel=require("../models/InternModel")
-const collegemodel = require("../models/collegemodel")
-const {validName}= require("../validator/validation")
+const {validName,validFullName,isValidLink}= require("../validator/validation")
 
 
 
 const createcollege=async function(req,res){
     try{ 
         let data=req.body
-    const {name,fullName,logoLink}=data
-  
-    if (!(name && fullName && logoLink)) { 
-        res.status(400).send({ status: false, msg: "All Fields are Mandatory." })
-     }
-    if(!validName(name)) return res.status(400).send({status:false,msg:"Enter valid name"});
-    if(!validName(fullName.trim().length==0)) return res.status(400).send({status:false,msg:"Enter valid fullName"})
+        if(!data) return res.status(400).send({status:false,msg:"Invalid request"})
+     const {name,fullName,logoLink}=data
+     if(!name) return res.status(400).send({status:false,msg:"Name is required"})
+     if(!validName(name.trim())) return res.status(400).send({status:false,msg:"Enter valid name"});
+     if(!fullName) return res.status(400).send({status:false,msg:"fullName is required"})
+    if(!validFullName(fullName.trim())) return res.status(400).send({status:false,msg:"Enter valid fullName"})
+    if(!logoLink) return res.status(400).send({status:false,msg:"Link is required"})
+    if(!isValidLink(logoLink)) return res.status(400).send({status:false,msg:"Enter a valid link"})
     
     let savedata=await CollegeModel.create(data)
 
@@ -41,7 +41,6 @@ const getCollege = async function (req, res) {
         if (interns.length == 0) return res.status(400).send({status: false, msg: 'no intern found in this college'});
 
         const {name, fullName, logoLink} = college;
-        
         const result = {name , fullName, logoLink, interns};
         res.status(200).send({status: true, data: result})
     } catch (error) {

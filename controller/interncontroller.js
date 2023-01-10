@@ -1,6 +1,5 @@
 const InternModel = require("../models/InternModel");
 const mongoose = require("mongoose");
-const { isValidObjectId } = require('mongoose');
 const collegemodel = require("../models/collegemodel");
 const {validName,validMail,validNumber}=require("../validator/validation")
 
@@ -26,15 +25,17 @@ const new_intern = async function (req, res) {
     }
     if(!validNumber(data.mobile)) return res.status(400).send({status:false,msg:"Enter valid mobile number"})
     
-    if(!isValidObjectId(data.collegeId)) return res.status(400).send({status:false,msg:"Enter valid college id"})
-
-    let id=await collegemodel.findById(data.collegeId)
-    if(!id) return res.status(400).send({status: false,msg:"CollegeId doesn't exits"})
-
-    let CreateIntern = await InternModel.create(data);
+    if(!data.collegeName) {
+      res.status(400).send({status:false,msg:"Enter college name"})
+    }
+    const internData= await collegemodel.findOne({name:data.collegeName})
+    const collegeId= internData._id
+    const {name,email,mobile,isDeleted} = data
+    const Intern = {name,email,mobile,isDeleted,collegeId} 
+    let CreateIntern = await InternModel.create(Intern)//
     res
       .status(201)
-      .send({ status: true, data: CreateIntern });
+      .send({ status: true, data: CreateIntern});
   } catch (error) {
     res
       .status(500)
