@@ -1,5 +1,4 @@
 const InternModel = require("../models/InternModel");
-const mongoose = require("mongoose");
 const collegemodel = require("../models/collegemodel");
 const {validName,validMail,validNumber}=require("../validator/validation")
 
