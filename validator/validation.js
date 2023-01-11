@@ -1,5 +1,3 @@
-const { link } = require("fs/promises");
-
 const validName = (name) => /^[a-zA-Z_]{3,20}$/.test(name);
 const validFullName = (fullName) => /^[a-zA-Z ,-]*$/.test(fullName);
 const validMail = (mail) =>
